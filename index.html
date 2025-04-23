@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Automobile Technology Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 20px;
+      color: #333;
+    }
+    .quiz-container {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      color: #0056b3;
+    }
+    .question {
+      margin-bottom: 20px;
+    }
+    .options button {
+      display: block;
+      margin: 8px 0;
+      padding: 10px;
+      width: 100%;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background-color: #e7e7e7;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .options button.correct {
+      background-color: #c8e6c9;
+    }
+    .options button.wrong {
+      background-color: #ffcdd2;
+    }
+    #score {
+      font-weight: bold;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h1>🚗 Automobile Technology Quiz</h1>
+    <div id="quiz"></div>
+    <p id="score"></p>
+  </div>
+
+  <script>
+    const quizData = [
+      { q: "The function of the steering system is:", a: "All of the above", b: "To provide directional stability", correct: "a" },
+      { q: "The component responsible for converting the rotation of the steering wheel into lateral motion is:", a: "Steering wheel", b: "Steering gearbox", correct: "b" },
+      { q: "Excessive play in steering wheel causes:", a: "Difficult to control vehicle", b: "Easy to turn steering wheel", correct: "a" },
+      { q: "Cause of over-steering in an automobile:", a: "Loose steering linkage components", b: "Low tyre pressure", correct: "a" },
+      { q: "Steering fluid helps:", a: "In rotating the steering wheel easily", b: "In drawing fuel from tank", correct: "a" },
+      { q: "Rack and pinion is the gear used in:", a: "Steering system", b: "Suspension system", correct: "a" },
+      { q: "Hydraulic brake features:", a: "Less force gives better braking", b: "More force gives lesser effect", correct: "a" },
+      { q: "Poor braking action can be due to:", a: "Air inside hydraulic brake", b: "Hard pedal", correct: "a" },
+      { q: "If brake pedal goes to floor without braking:", a: "Air trapped in hydraulic system", b: "Low brake fluid", correct: "a" },
+      { q: "Parking brake generally acts on:", a: "Rear wheels", b: "Front wheels", correct: "a" },
+      { q: "Type of brake used in tractors:", a: "Mechanical", b: "Hydraulic", correct: "a" },
+      { q: "Brake fluid function:", a: "Lubrication", b: "Power transmission", correct: "b" },
+      { q: "10.00×20-14 ply rating: 20 means —", a: "Width in cm", b: "Wheel rim diameter in inches", correct: "b" },
+      { q: "Tyre size 205-25: 205 refers to —", a: "Rim diameter", b: "Tyre width", correct: "b" },
+      { q: "Tubeless tyres cannot be used with —", a: "Disc wheel", b: "Wire wheel", correct: "b" },
+      { q: "Purpose of tyre rotation:", a: "Avoid ply separation", b: "Equalize wear", correct: "b" },
+      { q: "Cross ply tyres offer —", a: "Smoother ride at lower speed", b: "Longer life", correct: "a" },
+      { q: "Tubeless tyres advantage:", a: "Less chance of running flat", b: "Slow air leakage", correct: "a" },
+      { q: "Part of suspension system in trucks:", a: "Shock absorber", b: "Centre bearing", correct: "a" },
+      { q: "Common suspension issue:", a: "Shock absorber and ball joint wear-out", b: "Propeller shaft vibration", correct: "a" },
+      { q: "Independent suspension system means:", a: "One wheel’s movement doesn’t affect the other", b: "Both wheels rise and fall equally", correct: "a" },
+      { q: "Leaf spring varies its length using:", a: "Swinging shackle", b: "U-bolt mounting", correct: "a" },
+      { q: "Ride comfort is best when:", a: "Sprung mass is low", b: "Unsprung mass is low", correct: "b" },
+      { q: "Battery and starter motor are part of:", a: "Starting system", b: "Charging system", correct: "a" },
+      { q: "Starting issue when pinion engages but doesn’t crank:", a: "Discharged battery", b: "Defective ignition switch", correct: "a" },
+      { q: "Battery’s first cell is always:", a: "-ve", b: "+ve", correct: "a" },
+      { q: "Best antifreeze solution:", a: "Methanol", b: "Ethylene glycol", correct: "b" },
+      { q: "Electrical wires are made of:", a: "Steel", b: "Copper", correct: "b" },
+      { q: "Headlights are connected in:", a: "Series", b: "Parallel", correct: "b" }
+    ];
+
+    let score = 0;
+    const quiz = document.getElementById('quiz');
+    const scoreDisplay = document.getElementById('score');
+
+    quizData.forEach((item, index) => {
+      const qEl = document.createElement('div');
+      qEl.classList.add('question');
+      qEl.innerHTML = `<p><strong>Q${index + 1}:</strong> ${item.q}</p>`;
+
+      const btnA = document.createElement('button');
+      btnA.textContent = '(A) ' + item.a;
+      btnA.onclick = () => handleAnswer(btnA, btnB, item.correct === 'a');
+
+      const btnB = document.createElement('button');
+      btnB.textContent = '(B) ' + item.b;
+      btnB.onclick = () => handleAnswer(btnB, btnA, item.correct === 'b');
+
+      const options = document.createElement('div');
+      options.classList.add('options');
+      options.appendChild(btnA);
+      options.appendChild(btnB);
+
+      qEl.appendChild(options);
+      quiz.appendChild(qEl);
+    });
+
+    function handleAnswer(selected, other, isCorrect) {
+      if (selected.disabled || other.disabled) return;
+      if (isCorrect) {
+        selected.classList.add('correct');
+        score++;
+      } else {
+        selected.classList.add('wrong');
+        other.classList.add('correct');
+      }
+      selected.disabled = true;
+      other.disabled = true;
+      scoreDisplay.textContent = `Score: ${score}/${quizData.length}`;
+    }
+  </script>
+</body>
+</html>
